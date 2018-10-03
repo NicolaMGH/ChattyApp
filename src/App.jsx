@@ -11,7 +11,8 @@ class App extends Component {
     this.state = {
       currentUser: {name: "Anonymous"},
       messages: [], // messages coming from the server will be stored here as they arrive
-      count: 0
+      count: 0,
+      color: ''
     }
   }
 
@@ -23,25 +24,28 @@ class App extends Component {
       console.log('connected to server')
     }
     this.socket.onmessage = (e) => {
-      const data = JSON.parse(e.data);
-      if (typeof data === "number") {
-        this.setState({count: data})
+      //checks to see if this is the color hex
+      if (e.data[0] === '#') {
+        this.setState({ color: e.data });
       } else {
-        const old = this.state.messages;
-        const newMsg = [...old, data]
+        //if not color then parse and continue
+        const data = JSON.parse(e.data);
+        if (typeof data === "number") {
+          this.setState({count: data})
+        } else {
+          const old = this.state.messages;
+          const newMsg = [...old, data]
 
-        switch(data.type) {
-        case "incomingMessage":
-          // handle incoming message
-          this.setState({ messages: newMsg });
-          break;
-        case "incomingNotification":
-          // handle incoming notification
-          this.setState({ messages: newMsg });
-          break;
-        default:
-          // show an error in the console if the message type is unknown
-          throw new Error("Unknown event type " + data.type);
+          switch(data.type) {
+            // handle incoming message and notification
+          case "incomingMessage":
+          case "incomingNotification":
+            this.setState({ messages: newMsg });
+            break;
+          default:
+            // show an error in the console if the message type is unknown
+            throw new Error("Unknown event type " + data.type);
+          }
         }
       }
     }
@@ -51,7 +55,8 @@ class App extends Component {
     const nM = {
       type: "postMessage",
       content: message,
-      username: this.state.currentUser.name
+      username: this.state.currentUser.name,
+      color: this.state.color
     }
     this.socket.send(JSON.stringify(nM));
   }

@@ -5,6 +5,17 @@ const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
 var randomColor = require('randomcolor');
 
+// Tmp mem to record assigned colors.
+const usedColors = [];
+// Helper to generate a unique color.
+const diffColor = () => {
+  let newC = randomColor();
+  while (usedColors.includes(newC)) {
+    newC = randomColor();
+  }
+  return newC;
+}
+
 // Set the port to 3001
 const PORT = 3001;
 
@@ -23,9 +34,13 @@ const wss = new SocketServer({ server });
 wss.on('connection', (ws) => {
   console.log('Client connected');
 
-  // const color = randomColor();
-  // ws.send(color);
+  // New user detected
+  // Generate and send a random color for each new client.
+  const color = diffColor();
+  usedColors.push(color);
+  ws.send(color);
 
+  // broadcast user count
   wss.clients.forEach((client) => {
     client.send(wss.clients.size);
   });
@@ -51,5 +66,13 @@ wss.on('connection', (ws) => {
 
 
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
-  ws.on('close', () => console.log('Client disconnected'));
+  ws.on('close', () => {
+    console.log('Client disconnected');
+    // Remove color from used colors
+    usedColors.splice(usedColors.indexOf(color), 1);
+    // Broadcast new user count
+    wss.clients.forEach(client => {
+        client.send(wss.clients.size);
+    })
+  })
 });
