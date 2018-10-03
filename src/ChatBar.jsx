@@ -16,13 +16,13 @@ class Chatbar extends Component {
       this.props.newMessage(event.target.value);
       event.target.value = '';
     }
-  }
+  };
 
   const onUserPress = event => {
     if (event.key === 'Enter'){
       this.props.userChange(this.state.name);
     }
-  }
+  };
   return (
     <footer className="chatbar">
       <input

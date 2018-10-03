@@ -11,7 +11,7 @@ class App extends Component {
       messages: [], // messages coming from the server will be stored here as they arrive
       count: 0,
       color: ''
-    }
+    };
   }
 
   componentDidMount() {
@@ -19,34 +19,29 @@ class App extends Component {
 
     this.socket = new WebSocket("ws://localhost:3001/", "protocolOne");
     this.socket.onopen = (event) => {
-      console.log('connected to server')
-    }
+      console.log('connected to server');
+    };
     this.socket.onmessage = (e) => {
-      //checks to see if this is the color hex
-      if (e.data[0] === '#') {
-        this.setState({ color: e.data });
-      } else {
-        //if not color then parse and continue
-        const data = JSON.parse(e.data);
-        if (typeof data === "number") {
-          this.setState({count: data})
-        } else {
-          const old = this.state.messages;
-          const newMsg = [...old, data]
-
-          switch(data.type) {
-            // handle incoming message and notification
-          case "incomingMessage":
-          case "incomingNotification":
-            this.setState({ messages: newMsg });
-            break;
-          default:
-            // show an error in the console if the message type is unknown
-            throw new Error("Unknown event type " + data.type);
-          }
-        }
+     const data = JSON.parse(e.data);
+        // handle incoming data
+      switch(data.type) {
+      case "userColor":
+        this.setState({ color: data.color });
+        break;
+      case "userCount":
+        this.setState({count: data.count});
+        break;
+      case "incomingMessage":
+      case "incomingNotification":
+        const old = this.state.messages;
+        const newMsg = [...old, data];
+        this.setState({ messages: newMsg });
+        break;
+      default:
+        // show an error in the console if the message type is unknown
+        throw new Error("Unknown event type " + data.type);
       }
-    }
+    };
   }
 
   _newMessage = message => {

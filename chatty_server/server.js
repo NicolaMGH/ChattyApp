@@ -5,6 +5,16 @@ const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
 var randomColor = require('randomcolor');
 
+// Tmp mem to record assigned colors.
+const usedColors = [];
+// Helper to generate a unique color.
+const diffColor = () => {
+  let newC = randomColor();
+  while (usedColors.includes(newC)) {
+    newC = randomColor();
+  }
+  return newC;
+}
 
 // Set the port to 3001
 const PORT = 3001;
@@ -26,12 +36,20 @@ wss.on('connection', (ws) => {
 
   // New user detected
   // Generate and send a random color for each new client.
-  const color = randomColor();
-  ws.send(color);
+  const color = {
+    type: "userColor",
+    color: diffColor()
+  };
+  usedColors.push(color);
+  ws.send(JSON.stringify(color));
 
   // broadcast user count
   wss.clients.forEach((client) => {
-    client.send(wss.clients.size);
+    const online = {
+      type: "userCount",
+      count: wss.clients.size
+    };
+    client.send(JSON.stringify(online));
   });
 
   ws.on('message', messages => {
@@ -46,8 +64,8 @@ wss.on('connection', (ws) => {
         m.type = "incomingNotification";
         break;
       default:
-          // show an error in the console if the message type is unknown
-          throw new Error(`Unknown message type ${m.type}`);
+        // show an error in the console if the message type is unknown
+        throw new Error(`Unknown message type ${m.type}`);
     }
     wss.broadcast = data => {
       wss.clients.forEach((client) => {
@@ -63,9 +81,14 @@ wss.on('connection', (ws) => {
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
     console.log('Client disconnected');
+    usedColors.splice(usedColors.indexOf(color), 1);
     // Broadcast new user count
-    wss.clients.forEach(client => {
-        client.send(wss.clients.size);
-    })
-  })
+    wss.clients.forEach((client) => {
+      const online = {
+        type: "userCount",
+        count: wss.clients.size
+      };
+      client.send(JSON.stringify(online));
+    });
+  });
 });
