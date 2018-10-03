@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {Chatbar, Navbar} from './ChatBar.jsx';
 import MessageList from './MessageList.jsx';
-// import messages from './messages.json';
-// import { generateRandomId } from './helper';
 
 
 class App extends Component {

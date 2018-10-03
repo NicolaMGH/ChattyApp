@@ -5,16 +5,6 @@ const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
 var randomColor = require('randomcolor');
 
-// Tmp mem to record assigned colors.
-const usedColors = [];
-// Helper to generate a unique color.
-const diffColor = () => {
-  let newC = randomColor();
-  while (usedColors.includes(newC)) {
-    newC = randomColor();
-  }
-  return newC;
-}
 
 // Set the port to 3001
 const PORT = 3001;
@@ -36,8 +26,7 @@ wss.on('connection', (ws) => {
 
   // New user detected
   // Generate and send a random color for each new client.
-  const color = diffColor();
-  usedColors.push(color);
+  const color = randomColor();
   ws.send(color);
 
   // broadcast user count
@@ -47,12 +36,18 @@ wss.on('connection', (ws) => {
 
   ws.on('message', messages => {
     const m = JSON.parse(messages);
-    if (m.type === "postMessage") {
-      m.id = uuidv4();
-      m.type = "incomingMessage";
-    } else if ("postNotification") {
-      m.id = uuidv4();
-      m.type = "incomingNotification";
+    switch (m.type){
+      case "postMessage":
+        m.id = uuidv4();
+        m.type = "incomingMessage";
+        break;
+      case "postNotification":
+        m.id = uuidv4();
+        m.type = "incomingNotification";
+        break;
+      default:
+          // show an error in the console if the message type is unknown
+          throw new Error(`Unknown message type ${m.type}`);
     }
     wss.broadcast = data => {
       wss.clients.forEach((client) => {
@@ -68,8 +63,6 @@ wss.on('connection', (ws) => {
   // Set up a callback for when a client closes the socket. This usually means they closed their browser.
   ws.on('close', () => {
     console.log('Client disconnected');
-    // Remove color from used colors
-    usedColors.splice(usedColors.indexOf(color), 1);
     // Broadcast new user count
     wss.clients.forEach(client => {
         client.send(wss.clients.size);
