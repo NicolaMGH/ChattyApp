@@ -22,6 +22,8 @@ $ cd into ChattyApp and run 'npm start'
 $ cd into chatty_server and run 'npm start'
 $ open browser to http://localhost:3000
 ```
+> The webpack may take some time to compile*;
+
 > The application default websocket server address is *ws://localhost:3001*;
 
 ### Features

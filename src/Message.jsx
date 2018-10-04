@@ -5,7 +5,6 @@ const imageUrl = /https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg)/;
 //handles incoming messages and check whether it is a link or
 //a string and returns the proper html
 function handleImg(arr) {
-
     arr = arr.map((string, index) => {
       if (string.match(imageUrl)) {
         return (<img key="index" className="picture" src={string} />);
