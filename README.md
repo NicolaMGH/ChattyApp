@@ -34,7 +34,12 @@ open browser to http://localhost:3000
 
 ### Final Product
 
+#### Screenshot
+
 !["chattyapp"](https://github.com/NicolaMGH/ChattyApp/blob/master/docs/chattyapp.png?raw=true)
+
+#### GIF
+
 !["chattyappgif"](https://github.com/NicolaMGH/ChattyApp/blob/master/docs/ChattyApp.gif?raw=true)
 
 ### Dependencies
