@@ -5,7 +5,7 @@ import MessageList from './MessageList.jsx';
 
 class App extends Component {
   constructor(props) {
-    super();
+    super(props);
     this.state = {
       currentUser: {name: "Anonymous"},
       messages: [], // messages coming from the server will be stored here as they arrive
@@ -16,6 +16,7 @@ class App extends Component {
 
   componentDidMount() {
     console.log("componentDidMount <App />");
+    const scrollToBottom = () => window.scrollTo(0, document.body.scrollHeight);
 
     this.socket = new WebSocket("ws://localhost:3001/", "protocolOne");
     this.socket.onopen = (event) => {
@@ -33,9 +34,10 @@ class App extends Component {
         break;
       case "incomingMessage":
       case "incomingNotification":
+      case "incomingMessageImg":
         const old = this.state.messages;
         const newMsg = [...old, data];
-        this.setState({ messages: newMsg });
+        this.setState({ messages: newMsg }, scrollToBottom);
         break;
       default:
         // show an error in the console if the message type is unknown

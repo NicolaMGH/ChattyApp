@@ -5,9 +5,9 @@ const SocketServer = require('ws').Server;
 const uuidv4 = require('uuid/v4');
 var randomColor = require('randomcolor');
 
-// Tmp mem to record assigned colors.
+// records assigned colors
 const usedColors = [];
-// Helper to generate a unique color.
+// Generate a unique color for new users so the same color is not used in the same chat
 const diffColor = () => {
   let newC = randomColor();
   while (usedColors.includes(newC)) {
@@ -27,6 +27,8 @@ const server = express()
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
+
+const imageUrl = /https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg)/;
 
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
@@ -56,8 +58,17 @@ wss.on('connection', (ws) => {
     const m = JSON.parse(messages);
     switch (m.type){
       case "postMessage":
-        m.id = uuidv4();
-        m.type = "incomingMessage";
+        if (m.content.match(imageUrl)) {
+          m.content = m.content.split(' ')
+          m.type = "incomingMessageImg";
+          m.id = uuidv4();
+        } else {
+          m.type = "incomingMessage";
+          m.id = uuidv4();
+        }
+        // wss.broadcast(JSON.stringify(incomingMessage))
+        // m.id = uuidv4();
+        // m.type = "incomingMessage";
         break;
       case "postNotification":
         m.id = uuidv4();
