@@ -8,19 +8,19 @@ A single page app that uses React, Websockets, Webpack and Babel for multi-user 
 1. Clone this repo and install all dependencies.
 
 ```
-git clone https://github.com/NicolaMGH/ChattyApp.git
-cd into ChattyApp
-npm install
-cd into chatty_server
-npm install
+$ git clone https://github.com/NicolaMGH/ChattyApp.git
+$ cd into ChattyApp
+$ npm install
+$ cd into chatty_server
+$ npm install
 ```
 
 2. Start and run the application:
 
 ```
-cd into ChattyApp and run 'npm start'
-cd into chatty_server and run 'npm start'
-open browser to http://localhost:3000
+$ cd into ChattyApp and run 'npm start'
+$ cd into chatty_server and run 'npm start'
+$ open browser to http://localhost:3000
 ```
 > The application default websocket server address is *ws://localhost:3001*;
 
