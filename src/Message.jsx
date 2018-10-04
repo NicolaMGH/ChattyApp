@@ -2,8 +2,8 @@ import React from 'react';
 
 const imageUrl = /https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg)/;
 
-//handles array of incoming messages and check whether it is a link or
-//just a string and returns the proper html
+//handles incoming messages and check whether it is a link or
+//a string and returns the proper html
 function handleImg(arr) {
 
     arr = arr.map((string, index) => {
