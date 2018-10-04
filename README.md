@@ -35,7 +35,7 @@ open browser to http://localhost:3000
 ### Final Product
 
 !["chattyapp"](https://github.com/NicolaMGH/ChattyApp/blob/master/docs/chattyapp.png?raw=true)
-!["chattyappgif"](https://github.com/RayKayy/hichat-app/blob/master/docs/hichat_demo.png?raw=true)
+!["chattyappgif"](https://github.com/NicolaMGH/ChattyApp/blob/master/docs/ChattyApp.gif?raw=true)
 
 ### Dependencies
 
