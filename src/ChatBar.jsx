@@ -7,7 +7,7 @@ class Chatbar extends Component {
   }
 
   handleChange = (event) => {
-      this.setState({name: event.target.value});
+    this.setState({name: event.target.value});
   }
 
   render(){
@@ -37,8 +37,7 @@ class Chatbar extends Component {
         placeholder="Type a message and hit ENTER"
         onKeyPress={onMsgPress}
       />
-    </footer>
-    );
+    </footer>);
   }
 }
 

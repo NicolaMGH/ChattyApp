@@ -7,16 +7,13 @@ const imageUrl = /https?:\/\/.*\.(?:png|jpg|jpeg|gif|png|svg)/;
 function handleImg(arr) {
 
     arr = arr.map((string, index) => {
-        if (string.match(imageUrl)) {
-            return (
-                <img key="index" className="picture" src={string} />)
-        } else {
-            return (
-                string + " "
-            )
-        }
-    })
-    return arr
+      if (string.match(imageUrl)) {
+        return (<img key="index" className="picture" src={string} />);
+      } else {
+          return (string + " ");
+      }
+    });
+  return arr
 }
 
 function Message ({data}) {
@@ -33,13 +30,12 @@ function Message ({data}) {
   } else if (data.type === "incomingMessageImg") {
       return (<div className="message">
                 <div className="userdiv">
-                    <span style={style} className="message-username">{data.username}</span>
+                  <span style={style} className="message-username">{data.username}</span>
                 </div>
                 <div>
-                    <span className="message-content">{handleImg(data.content)}</span>
-
+                  <span className="message-content">{handleImg(data.content)}</span>
                 </div>
-            </div>);
+              </div>);
   }
 }
 
