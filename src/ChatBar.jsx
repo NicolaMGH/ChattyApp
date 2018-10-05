@@ -28,7 +28,6 @@ class Chatbar extends Component {
       <input
         className="chatbar-username"
         placeholder="Your Name (Optional)"
-        defaultValue={this.props.user}
         onChange={this.handleChange}
         onKeyPress={onUserPress}
       />
