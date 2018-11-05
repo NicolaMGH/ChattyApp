@@ -31,7 +31,7 @@ $ open browser to http://localhost:3000
 - Realtime messages between all clients.
 - Messages is saved locally on each clients state; no persistent messages on server.
 - Auto scroll on new message.
-- Ablity to send images
+- Ability to send images
 - Each user is assigned a unique color represented on the username.
 
 ### Final Product
